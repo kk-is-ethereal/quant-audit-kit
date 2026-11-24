@@ -93,7 +93,7 @@ python examples/demo_audit.py
 - **Perpetual Futures Multi-Source Lag-Alignment Pipeline** (Binance OHLCV + Funding + 15m-lagged OI + Deribit DVOL)
 - **Stratified Matched-Control Factor Pilot Templates** (kill 90% of fake factors before full backtests)
 
-Check out the **Pro Research Lab Kit** and **Weekly Honest Quant Notes** linked in the repository profile.
+Check out the **[Pro Research Lab Kit & Live 3,857-Run Evidence](https://kk-is-ethereal.github.io/quant-audit-kit/)** for full specs, interactive post-mortem charts, and one-time license options.
 
 ---
 
