@@ -22,5 +22,10 @@ dependencies = [
 fast = ["numba>=0.58"]
 dev = ["pytest>=7.4"]
 
+[project.urls]
+Homepage = "https://github.com/kk-is-ethereal/quant-audit-kit"
+Repository = "https://github.com/kk-is-ethereal/quant-audit-kit"
+Issues = "https://github.com/kk-is-ethereal/quant-audit-kit/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -28,6 +28,8 @@ When you let an LLM or coding agent iterate on trading strategies (`"keep tuning
 ## Installation
 
 ```bash
+git clone https://github.com/kk-is-ethereal/quant-audit-kit.git
+cd quant-audit-kit
 pip install -e .
 # Optional Numba JIT acceleration:
 pip install -e ".[fast]"
