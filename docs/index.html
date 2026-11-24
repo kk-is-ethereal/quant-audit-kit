@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honest Quant Lab — Zero-Leakage Quant Audit Kit &amp; Pro Research Harness</title>
+  <meta name="description" content="Born from 3,857 offline crypto quant runs with zero out-of-sample leakage. Open-source anti-cheating audit toolkit (MIT) + Pro AI Research Lab Kit." />
+  <link rel="icon" type="image/svg+xml" href="./assets/avatar_statistical_gate.svg" />
+  <style>
+    :root {
+      --bg: #070B16;
+      --bg-elev: #0E1529;
+      --bg-card: #111A33;
+      --border: #1F2D4D;
+      --border-strong: #2E4270;
+      --text: #F1F5F9;
+      --muted: #94A3B8;
+      --cyan: #38BDF8;
+      --amber: #F59E0B;
+      --green: #10B981;
+      --red: #F43F5E;
+      --purple: #A78BFA;
+      --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background:
+        radial-gradient(900px 500px at 15% -5%, rgba(56, 189, 248, 0.12), transparent 60%),
+        radial-gradient(700px 450px at 85% 5%, rgba(245, 158, 11, 0.08), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 11, 22, 0.82);
+      border-bottom: 1px solid rgba(31, 45, 77, 0.7);
+    }
+    .nav {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0EA5E9, #38BDF8);
+      color: #07101E;
+      font-weight: 700;
+      font-size: 13.5px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3); }
+
+    /* Hero */
+    .hero { padding: 84px 0 56px; text-align: center; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      color: var(--cyan);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+    h1 {
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      max-width: 880px;
+      margin: 0 auto 20px;
+    }
+    .grad-text {
+      background: linear-gradient(90deg, #38BDF8 0%, #F8FAFC 55%, #F59E0B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      max-width: 700px;
+      margin: 0 auto 36px;
+      font-size: 17.5px;
+      color: var(--muted);
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.16s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #D97706, #F59E0B);
+      color: #090D16;
+      box-shadow: 0 8px 26px rgba(245, 158, 11, 0.22);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(245, 158, 11, 0.34); }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+    .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* Proof Strip */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 72px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 20px;
+      text-align: left;
+    }
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .stat-label { font-size: 13px; color: var(--muted); }
+    .c-cyan { color: var(--cyan); }
+    .c-amber { color: var(--amber); }
+    .c-red { color: var(--red); }
+    .c-green { color: var(--green); }
+
+    /* Sections */
+    section { padding: 64px 0; }
+    .sec-head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+    .sec-kicker {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+    h2 { font-size: clamp(26px, 3.6vw, 38px); letter-spacing: -0.02em; margin-bottom: 12px; }
+    .sec-desc { color: var(--muted); font-size: 16px; }
+
+    /* Interactive Evidence Viewer */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .tab-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      border-color: var(--cyan);
+      color: var(--text);
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .chart-frame {
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+    .chart-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
+    .chart-caption {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      font-family: var(--mono);
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.16s ease;
+    }
+    .feature-card:hover { border-color: var(--border-strong); }
+    .feature-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .tag-mit { background: rgba(16, 185, 129, 0.12); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-pro { background: rgba(245, 158, 11, 0.12); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .feature-card h3 { font-size: 17px; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--muted); }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .price-card.featured {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35), 0 24px 54px rgba(245, 158, 11, 0.1);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, var(--bg-card) 35%);
+    }
+    .badge-pop {
+      position: absolute;
+      top: -12px;
+      right: 22px;
+      background: linear-gradient(135deg, #D97706, #F59E0B);
+      color: #080C16;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .tier-name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .tier-sub { font-size: 13.5px; color: var(--muted); min-height: 42px; }
+    .tier-price {
+      font-family: var(--mono);
+      font-size: 40px;
+      font-weight: 800;
+      margin: 18px 0 4px;
+    }
+    .tier-note { font-size: 12.5px; color: var(--muted); margin-bottom: 22px; }
+    .tier-list {
+      list-style: none;
+      margin-bottom: 26px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      font-size: 14px;
+    }
+    .tier-list li { display: flex; gap: 10px; align-items: flex-start; color: #CBD5E1; }
+    .check { color: var(--green); font-weight: 800; flex-shrink: 0; }
+    .tier-btn { width: 100%; }
+
+    /* FAQ */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .faq-item {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .faq-item h4 { font-size: 15.5px; margin-bottom: 8px; }
+    .faq-item p { font-size: 14px; color: var(--muted); }
+
+    /* Disclaimer Banner & Footer */
+    .disclaimer {
+      margin-top: 24px;
+      background: rgba(244, 63, 94, 0.06);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      border-radius: 12px;
+      padding: 18px 22px;
+      font-size: 13px;
+      color: #CBD5E1;
+    }
+    footer {
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      padding: 32px 0 48px;
+      color: var(--muted);
+      font-size: 13.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid, .pricing-grid, .faq-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#">
+        <img src="./assets/avatar_honest_quant_lab.jpg" alt="Honest Quant Lab Logo" />
+        <span>Honest Quant Lab</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#evidence">3,857-Run Evidence</a>
+        <a href="#architecture">What's Inside</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a data-link="github" href="https://github.com/kk-is-ethereal/quant-audit-kit" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <a class="nav-cta" href="#pricing">Get Pro Lab Kit</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="pill">
+          <span class="pill-dot"></span>
+          3,857 Offline Crypto Quant Runs • Zero Out-of-Sample Leakage
+        </div>
+        <h1>
+          Stop Letting AI Agents<br />
+          <span class="grad-text">Fool Your Backtests.</span>
+        </h1>
+        <p class="hero-sub">
+          Out of 3,857 automated Binance perpetual runs, <strong>914</strong> cleared CAGR ≥ 40%, Sharpe ≥ 1.8, and MaxDD ≤ 20% simultaneously — yet <strong>zero</strong> survived paired block-bootstrap significance. Get the exact anti-cheating audit engine &amp; AI research harness behind it.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#pricing">Get Pro Research Lab Kit — $39 / $79</a>
+          <a class="btn btn-secondary" data-link="github" href="https://github.com/kk-is-ethereal/quant-audit-kit" target="_blank" rel="noopener">
+            ★ Open-Source Core (MIT) on GitHub
+          </a>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num c-cyan">3,857</div>
+            <div class="stat-label">Automated in-sample runs across 340 distinct strategy families</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num c-amber">914</div>
+            <div class="stat-label">Cleared CAGR ≥ 40%, Sharpe ≥ 1.8, Calmar ≥ 2.0 &amp; DD ≤ 20%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num c-red">0</div>
+            <div class="stat-label">Survived 14-day Circular Block Bootstrap vs. Buy &amp; Hold (p &lt; 0.05)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num c-green">0</div>
+            <div class="stat-label">Out-of-sample (2025–2026) rows read or polluted</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence">
+      <div class="container">
+        <div class="sec-head">
+          <div class="sec-kicker">Empirical Proof</div>
+          <h2>Built From Real Friction, Not Cherry-Picked Equity Curves</h2>
+          <p class="sec-desc">Every chart below comes directly from our 20 bps round-trip + real 8h funding research ledger. Click a tab to inspect all four post-mortem views.</p>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-chart="./assets/01_survival_funnel.png" data-cap="Survival funnel: 3,857 runs → 914 core-4 passers → 0 benchmark survivors (0 OOS peeks).">1. Survival Funnel</button>
+          <button class="tab-btn" data-chart="./assets/02_sharpe_vs_benchmark_p.png" data-cap="High-Sharpe illusion: even Sharpe 2.08 / CAGR 122.1% stalled at bootstrap p = 0.1108.">2. High-Sharpe Illusion</button>
+          <button class="tab-btn" data-chart="./assets/03_factor_graveyard_bps.png" data-cap="Factor graveyard: classic signals &amp; ML pilots after 20 bps friction, real funding, and matched controls.">3. Factor Graveyard</button>
+          <button class="tab-btn" data-chart="./assets/04_failure_causes.png" data-cap="Automated failure taxonomy assigned to every single run before OOS was ever touched.">4. Failure Breakdown</button>
+        </div>
+
+        <div class="chart-frame">
+          <img id="activeChart" src="./assets/01_survival_funnel.png" alt="3,857 AI Crypto Quant Experiments Survival Funnel" />
+          <div id="activeCaption" class="chart-caption">Survival funnel: 3,857 runs → 914 core-4 passers → 0 benchmark survivors (0 OOS peeks).</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="container">
+        <div class="sec-head">
+          <div class="sec-kicker">Engineering Architecture</div>
+          <h2>Open-Core Guardrails + Production AI Research Harness</h2>
+          <p class="sec-desc">Start with our free MIT audit library, or upgrade to the Pro Lab Kit for the full zero-leakage autonomous research harness, stratified factor pilots, and publication chart generator.</p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <span class="feature-tag tag-mit">OPEN-SOURCE CORE (MIT)</span>
+            <h3>Prefix-Truncation Look-Ahead Audit</h3>
+            <p>Slices raw inputs at 19% / 48% / 76% watermarks and asserts bit-level equality (<code>1e-12</code>). Instantly traps sneaky z-scores, forward-fills, and unclosed higher-timeframe bars.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-tag tag-mit">OPEN-SOURCE CORE (MIT)</span>
+            <h3>14-Day Block Bootstrap &amp; Cash Replay</h3>
+            <p>Paired Circular Block Bootstrap with automatic ruin-safe fallback, plus pure-Python bar-by-bar cash replay triggered on anomalous Sharpe (&gt; 3.5) or win rate (&gt; 82%).</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-tag tag-mit">OPEN-SOURCE CORE (MIT)</span>
+            <h3>OOS Lockbox &amp; Margin Stress</h3>
+            <p>SHA-256 binds frozen candidate code to a sequential Bonferroni budget (<code>αₙ = 0.05 / (n(n+1))</code>) alongside intraday High/Low cross-margin maintenance stress tests.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-tag tag-pro">PRO LAB KIT</span>
+            <h3>Stratified Matched Pilot &amp; Oracle Bound</h3>
+            <p>Kill 90% of fake factors in seconds before full backtests using 1:1 stratified control matching and hindsight Oracle capacity bounds that prove when tuning cannot pass.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-tag tag-pro">PRO LAB KIT</span>
+            <h3>Multi-Source Causal Lag &amp; Stale Fuse</h3>
+            <p>Align auxiliary feeds (OI, funding, options IV, on-chain) with forced publication latency (+15m / +2d), 90m staleness circuit-breakers, and SHA-256 snapshot manifests.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-tag tag-pro">PRO LAB KIT</span>
+            <h3>Zero-Leakage AI Agent Harness &amp; Charts</h3>
+            <p>Complete Codex / GPT / Antigravity agent specification with 3-strike family pivot scheduler, source-hashed experiment ledger, and our exact dark-mode SVG chart generator.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="container">
+        <div class="sec-head">
+          <div class="sec-kicker">One-Time Purchase • Lifetime Updates</div>
+          <h2>Own the Tooling, Never Rent Another Black Box</h2>
+          <p class="sec-desc">Zero subscriptions, zero recurring lock-in, instant ZIP download via Gumroad.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="tier-name">Open Core</div>
+            <div class="tier-sub">Essential anti-cheating audit primitives for any Python backtest.</div>
+            <div class="tier-price">$0</div>
+            <div class="tier-note">MIT License • Forever free</div>
+            <ul class="tier-list">
+              <li><span class="check">✓</span> Multi-asset ledger (fee + slip + carry)</li>
+              <li><span class="check">✓</span> Prefix-truncation look-ahead audit</li>
+              <li><span class="check">✓</span> Pure-Python cash/inventory replay</li>
+              <li><span class="check">✓</span> 14-day Circular Block Bootstrap</li>
+              <li><span class="check">✓</span> Intraday cross-margin &amp; plateau tests</li>
+              <li><span class="check">✓</span> OOS Lockbox + Bonferroni ledger</li>
+            </ul>
+            <a class="btn btn-secondary tier-btn" data-link="github" href="https://github.com/kk-is-ethereal/quant-audit-kit" target="_blank" rel="noopener">Clone on GitHub</a>
+          </div>
+
+          <div class="price-card">
+            <div class="tier-name">Starter Blueprint</div>
+            <div class="tier-sub">For solo researchers who want the zero-leakage AI Agent prompt harness &amp; reporting templates.</div>
+            <div class="tier-price">$39</div>
+            <div class="tier-note">One-time payment • Instant ZIP delivery</div>
+            <ul class="tier-list">
+              <li><span class="check">✓</span> Everything in Open Core (MIT)</li>
+              <li><span class="check">✓</span> Zero-Leakage AI Agent Harness Spec (Codex / GPT / Antigravity)</li>
+              <li><span class="check">✓</span> Auto Pivot-After-3-Failures scheduler &amp; hashed ledger</li>
+              <li><span class="check">✓</span> Dark-mode SVG post-mortem chart generator</li>
+              <li><span class="check">✓</span> Weekly reproducible research brief template</li>
+            </ul>
+            <a class="btn btn-secondary tier-btn" data-gumroad="starter" href="#gumroad-setup" target="_blank" rel="noopener">Buy Starter — $39</a>
+          </div>
+
+          <div class="price-card featured">
+            <div class="badge-pop">MOST COMPLETE</div>
+            <div class="tier-name">Pro Research Lab Kit</div>
+            <div class="tier-sub">The complete offline quantitative auditing &amp; fast factor-falsification stack.</div>
+            <div class="tier-price">$79</div>
+            <div class="tier-note">One-time payment • Instant ZIP + all v0.x updates</div>
+            <ul class="tier-list">
+              <li><span class="check">✓</span> Everything in Starter Blueprint</li>
+              <li><span class="check">✓</span> <strong>Stratified Matched-Control Pilot Engine</strong> (1:1 control matching + real friction)</li>
+              <li><span class="check">✓</span> <strong>Oracle Capacity Bound Calculator</strong> (kill impossible families in seconds)</li>
+              <li><span class="check">✓</span> <strong>Multi-Source Causal Lag &amp; Staleness Fuse</strong> (+15m/+2d lag, 90m breaker, SHA-256 manifest)</li>
+              <li><span class="check">✓</span> Full synthetic unit-test suite &amp; runnable examples</li>
+              <li><span class="check">✓</span> Commercial internal research license</li>
+            </ul>
+            <a class="btn btn-primary tier-btn" data-gumroad="pro" href="#gumroad-setup" target="_blank" rel="noopener">Buy Pro Lab Kit — $79</a>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          <strong>Strict Compliance Notice:</strong> Honest Quant Lab sells software engineering toolkits, statistical audit code, and educational research templates only. Nothing in this repository or Pro kit contains trading signals, live bots, investment advice, or return promises. All 3,857 documented runs are historical offline simulations.
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="sec-head">
+          <div class="sec-kicker">FAQ</div>
+          <h2>Straight Answers Before You Buy</h2>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h4>Does this include a profitable trading strategy?</h4>
+            <p><strong>No.</strong> As our 3,857-run post-mortem proves openly, zero candidates have earned an OOS unlock yet. You are buying the engineering and statistical machinery to audit <em>your own</em> strategies honestly and save weeks of building guardrails from scratch.</p>
+          </div>
+          <div class="faq-item">
+            <h4>Does it only work for Binance / crypto?</h4>
+            <p>No. Every module is strategy-agnostic and asset-agnostic. Just pass any pandas price/return DataFrame and set <code>days_per_year=252</code> for equities/ETFs or <code>365.2425</code> for 24/7 crypto markets.</p>
+          </div>
+          <div class="faq-item">
+            <h4>What dependencies are required?</h4>
+            <p>Only <code>numpy</code> and <code>pandas</code> (Python 3.10+). Optional <code>numba</code> acceleration is auto-detected; our publication SVG chart engine uses pure Python standard library with zero matplotlib headaches.</p>
+          </div>
+          <div class="faq-item">
+            <h4>How is the Pro Lab Kit delivered?</h4>
+            <p>Immediately after checkout on Gumroad, you receive an automated download link for the clean versioned ZIP archive containing all Python source code, tests, agent harness specs, and examples.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:12px;">
+      <span>© 2026 Honest Quant Lab • Engineering &amp; Statistical Research Only</span>
+      <div style="display:flex;gap:18px;">
+        <a data-link="github" href="https://github.com/kk-is-ethereal/quant-audit-kit" target="_blank" rel="noopener">GitHub</a>
+        <a data-link="substack" href="#pricing">Substack</a>
+        <a href="#pricing">Pro Kit</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // CENTRAL LINK CONFIG — Replace with your live Gumroad & Substack URLs
+    // =========================================================================
+    const LINKS = {
+      github: "https://github.com/kk-is-ethereal/quant-audit-kit",
+      substack: "https://honestquantlab.substack.com",
+      gumroadStarter: "https://gumroad.com/l/honest-quant-starter", // TODO: paste your live Gumroad Starter URL
+      gumroadPro: "https://gumroad.com/l/honest-quant-pro"          // TODO: paste your live Gumroad Pro URL
+    };
+
+    document.querySelectorAll('[data-link="github"]').forEach(el => el.href = LINKS.github);
+    document.querySelectorAll('[data-link="substack"]').forEach(el => el.href = LINKS.substack);
+    document.querySelectorAll('[data-gumroad="starter"]').forEach(el => el.href = LINKS.gumroadStarter);
+    document.querySelectorAll('[data-gumroad="pro"]').forEach(el => el.href = LINKS.gumroadPro);
+
+    // Interactive chart switcher
+    const chartImg = document.getElementById("activeChart");
+    const chartCap = document.getElementById("activeCaption");
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        chartImg.src = btn.dataset.chart;
+        chartCap.textContent = btn.dataset.cap;
+      });
+    });
+  </script>
+</body>
+</html>
