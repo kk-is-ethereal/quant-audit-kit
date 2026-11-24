@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quant-audit-kit"
+version = "0.1.0"
+description = "Anti-cheating causality, block-bootstrap benchmark, parameter-plateau, margin-stress, and OOS-lockbox audit toolkit for systematic trading research."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+  {name = "Honest Quant Lab"}
+]
+keywords = ["quantitative-finance", "backtesting", "anti-overfitting", "lookahead-bias", "bootstrap", "ai-agents"]
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+fast = ["numba>=0.58"]
+dev = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
